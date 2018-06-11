@@ -25,7 +25,6 @@ from info import licenceNumber, theoryNumber, myTestDateString
 # Email sending details
 
 from info import emailAddresses, emailUsername, emailPassword
-from find_cancellations_selenium import open_web
 
 emailSubject = "DSA Cancellations"
 emailFrom = "no-reply@example.com"
@@ -52,11 +51,6 @@ cookieJar = http.cookiejar.CookieJar()
 
 #control the number of appointments shown
 max_shownum = 10 #
-
-#choose the action when find an available datetime
-#0: send an email
-#1: open web directly
-action_choosen = 1
 
 def isBeforeMyTest(dt):
     if dt <= myTestDate:
@@ -129,7 +123,6 @@ def performUpdate():
     global userAgents
     global soonerDates
     global max_shownum
-    global action_choosen
 
     # this should point at the DSA login page
     launchPage = 'https://driverpracticaltest.direct.gov.uk/login'
@@ -211,11 +204,8 @@ def performUpdate():
                 print ('-----> %s' % (dt.strftime('%A %d %b %Y at %H:%M'),))
 
     if len(newSoonerDates):
-        if action_choosen == 1:
-            open_web()
-        elif action_choosen == 0:
-            print('---> Sending to ' + ', '.join(emailAddresses))
-            sendEmail(newSoonerDates)
+        print('---> Sending to ' + ', '.join(emailAddresses))
+        sendEmail(newSoonerDates)
 
     if baseWaitTime > 300:
         # decrease the baseline wait time as this was a success
